@@ -27,12 +27,5 @@ public class HomePage {
         Observable<HttpClientResponse<ByteBuf>> users =  RxNetty.createHttpGet("http://jsonplaceholder.typicode.com/users");
 
         return new SyntheticResult(swapi, users);
-
-                /*.flatMap(response -> {
-                    return response.getContent().<String>map(content -> {
-                        System.out.println(content.toString(Charset.defaultCharset()));
-                        return content.toString(Charset.defaultCharset());
-                    });
-                }).toBlocking().toFuture().get(1, TimeUnit.MINUTES);*/
     }
 }

@@ -15,15 +15,11 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
-/**
- * Created by barringtonhenry on 11/1/15.
- */
 @Provider
 @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
 public class ObservableBodyWriter implements MessageBodyWriter<SyntheticResult> {
