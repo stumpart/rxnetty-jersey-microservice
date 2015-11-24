@@ -53,48 +53,20 @@ public class ObservableBodyWriter implements MessageBodyWriter<SyntheticResult> 
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
 
-        System.out.println("in the writeto....");
-        //entityStream.write(( "Barrington out stream..  ").getBytes());
-        stringObservable.run().subscribe(new Subscriber<ByteBuf>() {
-            @Override
-            public void onCompleted() {
 
-            }
-
-            @Override
-            public void onError(Throwable e) {}
-
-            @Override
-            public void onNext(ByteBuf byteBuf) {
-                ByteBuf myBuf = byteBuf.retain();
-                System.out.println("into next...");
-                System.out.println("Thread Id Netty : " + Thread.currentThread().getId() + " - " + Thread.currentThread().getName());
-
-                try{
-                    //System.out.println(byteBufHttpClientResponse);
-                   //entityStream.write("barrington...".getBytes());
-                   //ObjectOutputStream ob = new ObjectOutputStream(entityStream);
-                   // ob.writeObject(myBuf);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+        /**
+         * TODO: Need to make non blocking. But there is an issue when
+         * when moving bytebuf across threads. Race condition issue, stream might be closing
+         * before data comes
+         */
+        stringObservable.run().toBlocking().forEach((b) -> {
+            try {
+                String res = b.toString(Charset.defaultCharset());
+                entityStream.write(res.getBytes());
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
-        /*stringObservable.subscribe(new Subscriber<String>() {
-            @Override
-            public void onCompleted() {}
 
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-                try{
-                    entityStream.write((s + "..  ").getBytes());
-                }catch(Exception e){}
-            }
-        });*/
     }
 }
